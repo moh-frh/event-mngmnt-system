@@ -1,0 +1,28 @@
+# Development overrides for docker-compose.yml
+# This file is automatically loaded by docker-compose
+# Copy this file and modify as needed for your local development
+
+version: '3.8'
+
+services:
+  event-manager:
+    # Override for development
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    environment:
+      - NODE_ENV=development
+      - DEBUG=*
+    volumes:
+      # Mount source code for hot reload
+      - ./server:/app/server
+      - ./client:/app/client
+      - event_data:/app/server/data
+      - event_uploads:/app/server/uploads
+      - /app/node_modules
+      - /app/client/node_modules
+    ports:
+      - "5000:5000"
+      - "3000:3000"
+    command: sh -c "npm run dev-full"

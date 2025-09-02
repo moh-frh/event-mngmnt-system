@@ -42,21 +42,73 @@ A comprehensive event management application built with Node.js backend and Reac
 ## 🛠️ Technology Stack
 
 ### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **SQLite** - Database (with Firebase migration path)
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
-- **Express Validator** - Input validation
+- **Node.js 18.19.0** - Runtime environment (LTS)
+- **Express.js 4.18.2** - Web framework
+- **SQLite 5.1.6** - Database (with Firebase migration path)
+- **JWT 9.0.2** - Authentication
+- **bcryptjs 2.4.3** - Password hashing
+- **Express Validator 7.0.1** - Input validation
 
 ### Frontend
-- **React 18** - UI library
-- **React Router** - Navigation
-- **Tailwind CSS** - Styling
-- **React Hook Form** - Form management
-- **Axios** - HTTP client
-- **React Hot Toast** - Notifications
-- **React Icons** - Icon library
+- **React 18.2.0** - UI library
+- **React Router 6.8.1** - Navigation
+- **Tailwind CSS 3.2.7** - Styling
+- **React Hook Form 7.43.9** - Form management
+- **Axios 1.3.4** - HTTP client
+- **React Hot Toast 2.4.0** - Notifications
+- **React Icons 4.7.1** - Icon library
+
+## 🐳 Docker Setup (Recommended)
+
+### Prerequisites
+- Docker Desktop (Windows/Mac) or Docker Engine (Linux)
+- Docker Compose
+
+### Quick Start with Docker
+
+1. **Clone and run with Docker Compose**
+   ```bash
+   git clone <repository-url>
+   cd event-manager-app
+   
+   # Start production environment
+   docker-compose up -d
+   
+   # Or start development environment with hot reload
+   docker-compose --profile development up -d
+   ```
+
+2. **Access the application**
+   - Backend API: http://localhost:5000
+   - Frontend: http://localhost:3000 (development) or http://localhost:5000 (production)
+   - Health check: http://localhost:5000/health
+
+### Docker Commands
+
+```bash
+# Production
+npm run docker:compose:up      # Start production
+npm run docker:compose:down    # Stop services
+
+# Development
+npm run docker:compose:dev     # Start development with hot reload
+npm run docker:logs           # View logs
+npm run docker:restart        # Restart services
+npm run docker:rebuild        # Rebuild and restart
+
+# Individual Docker commands
+npm run docker:build          # Build image
+npm run docker:run            # Run container
+npm run docker:clean          # Clean up Docker resources
+```
+
+### Docker Benefits
+- ✅ **Version Consistency**: Exact Node.js 18.19.0 and dependency versions
+- ✅ **Cross-Platform**: Works identically on Windows, Mac, and Linux
+- ✅ **No Local Dependencies**: No need to install Node.js, npm, or other tools
+- ✅ **Isolated Environment**: Prevents conflicts with other projects
+- ✅ **Easy Deployment**: Same container runs in development and production
+- ✅ **Persistent Data**: SQLite database and uploads persist across restarts
 
 ## 📁 Project Structure
 
@@ -76,67 +128,45 @@ event-manager-app/
 │   │   ├── pages/         # Page components
 │   │   └── App.js         # Main app component
 │   └── package.json       # Frontend dependencies
-├── package.json           # Root package.json
+├── Dockerfile             # Production Docker build
+├── Dockerfile.dev         # Development Docker build
+├── docker-compose.yml     # Production services
+├── docker-compose.override.yml # Development overrides
+├── package.json           # Root package.json with exact versions
 └── README.md              # This file
 ```
 
 ## 🚀 Getting Started
 
-### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
+### Option 1: Docker (Recommended)
+```bash
+# Clone repository
+git clone <repository-url>
+cd event-manager-app
 
-### Installation
+# Start with Docker
+docker-compose up -d
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd event-manager-app
-   ```
+# View logs
+docker-compose logs -f
+```
 
-2. **Install dependencies**
-   ```bash
-   # Install root dependencies
-   npm install
-   
-   # Install frontend dependencies
-   cd client && npm install
-   cd ..
-   ```
+### Option 2: Local Development
+```bash
+# Prerequisites
+- Node.js 18.19.0 (exact version)
+- npm 9.8.1 (exact version)
 
-3. **Environment Setup**
-   ```bash
-   # Copy environment template
-   cp env.example .env
-   
-   # Edit .env file with your configuration
-   nano .env
-   ```
+# Clone repository
+git clone <repository-url>
+cd event-manager-app
 
-4. **Database Setup**
-   ```bash
-   # The SQLite database will be created automatically
-   # No additional setup required
-   ```
+# Install dependencies
+npm run install-all
 
-5. **Start the application**
-   ```bash
-   # Development mode (both backend and frontend)
-   npm run dev-full
-   
-   # Or start separately:
-   npm run dev          # Backend only
-   npm run client       # Frontend only
-   ```
-
-### Development Scripts
-
-- `npm start` - Start production server
-- `npm run dev` - Start development server with nodemon
-- `npm run client` - Start React development server
-- `npm run dev-full` - Start both backend and frontend
-- `npm run build` - Build React app for production
-- `npm run install-all` - Install all dependencies
+# Start development
+npm run dev-full
+```
 
 ## 🌐 API Endpoints
 
@@ -208,28 +238,34 @@ The application uses JWT tokens for authentication with role-based access contro
 ## 🧪 Testing
 
 ```bash
-# Run backend tests
-npm test
+# With Docker
+docker-compose exec event-manager npm test
 
-# Run frontend tests
+# Local development
+npm test
 cd client && npm test
 ```
 
 ## 📦 Deployment
 
-### Backend Deployment
+### Docker Deployment
 ```bash
-# Build and start production server
-npm run build
-npm start
+# Build and deploy
+docker-compose up -d
+
+# Update deployment
+git pull
+docker-compose down
+docker-compose up -d --build
 ```
 
-### Frontend Deployment
+### Traditional Deployment
 ```bash
-# Build for production
+# Build frontend
 cd client && npm run build
 
-# Deploy build folder to your hosting service
+# Start backend
+npm start
 ```
 
 ## 🤝 Contributing
@@ -261,4 +297,46 @@ For support and questions:
 ---
 
 **Built with ❤️ for event professionals and organizers**
+
+## 🔧 Troubleshooting
+
+### Common Docker Issues
+
+**Port already in use:**
+```bash
+# Check what's using the port
+netstat -ano | findstr :5000  # Windows
+lsof -i :5000                 # Mac/Linux
+
+# Stop conflicting services or change ports in docker-compose.yml
+```
+
+**Permission denied:**
+```bash
+# On Linux/Mac, ensure proper file permissions
+chmod -R 755 .
+```
+
+**Database connection issues:**
+```bash
+# Check container logs
+docker-compose logs event-manager
+
+# Verify database volume
+docker volume ls
+docker volume inspect event-manager-app_event_data
+```
+
+### Version Compatibility
+
+This project uses exact version pinning to ensure consistency:
+- **Node.js**: 18.19.0 (LTS)
+- **npm**: 9.8.1
+- All dependencies have exact versions (no ^ or ~)
+
+If you need to update versions:
+1. Update the version in `package.json`
+2. Update the Node.js version in `Dockerfile` and `Dockerfile.dev`
+3. Test thoroughly before committing
+4. Update this README with new version information
 

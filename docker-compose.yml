@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  event-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: event-manager-app
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+    volumes:
+      # Persist SQLite database
+      - event_data:/app/server/data
+      # Persist file uploads
+      - event_uploads:/app/server/uploads
+    networks:
+      - event-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Development service (optional)
+  event-manager-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    container_name: event-manager-dev
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - REACT_APP_API_URL=http://localhost:5000
+    volumes:
+      # Mount source code for hot reload
+      - ./server:/app/server
+      - ./client:/app/client
+      - event_data:/app/server/data
+      - event_uploads:/app/server/uploads
+      - /app/node_modules
+      - /app/client/node_modules
+    networks:
+      - event-network
+    profiles:
+      - development
+
+volumes:
+  event_data:
+    driver: local
+  event_uploads:
+    driver: local
+
+networks:
+  event-network:
+    driver: bridge

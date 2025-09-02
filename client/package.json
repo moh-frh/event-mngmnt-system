@@ -2,29 +2,26 @@
   "name": "event-manager-client",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "18.19.0",
+    "npm": "9.8.1"
+  },
   "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-router-dom": "6.8.1",
+    "react-hook-form": "7.43.9",
+    "axios": "1.3.4",
+    "react-hot-toast": "2.4.0",
+    "react-icons": "4.7.1",
+    "moment": "2.29.4",
+    "uuid": "9.0.1"
+  },
+  "devDependencies": {
     "react-scripts": "5.0.1",
-    "react-router-dom": "^6.8.1",
-    "axios": "^1.3.4",
-    "react-hook-form": "^7.43.5",
-    "react-hot-toast": "^2.4.0",
-    "react-icons": "^4.8.0",
-    "date-fns": "^2.29.3",
-    "react-big-calendar": "^1.8.5",
-    "react-datepicker": "^4.11.2",
-    "react-select": "^5.7.2",
-    "react-dropzone": "^14.2.3",
-    "framer-motion": "^10.0.1",
-    "recharts": "^2.5.0",
-    "clsx": "^1.2.1",
-    "tailwindcss": "^3.2.7",
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.21"
+    "tailwindcss": "3.2.7",
+    "autoprefixer": "10.4.14",
+    "postcss": "8.4.21"
   },
   "scripts": {
     "start": "react-scripts start",
