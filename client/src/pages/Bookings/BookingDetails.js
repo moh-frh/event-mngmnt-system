@@ -138,3 +138,4 @@ const BookingDetails = () => {
 };
 
 export default BookingDetails;
+
